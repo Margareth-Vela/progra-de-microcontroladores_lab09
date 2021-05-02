@@ -1,5 +1,5 @@
 /*
- * Archivo:   Lab08.c
+ * Archivo:   Lab09.c
  * Dispositivo: PIC16F887
  * Autor: Margareth Vela 
  * 
@@ -7,7 +7,7 @@
  * Hardware:Potenciómetros en PORTA y servos en PORTC
  * 
  * Creado: Abril 26, 2021
- * Última modificación: Abril 20, 2021
+ * Última modificación: Abril 27, 2021
  */
 
 //------------------------------------------------------------------------------
@@ -18,7 +18,7 @@
 //------------------------------------------------------------------------------
 //                          Directivas del compilador
 //------------------------------------------------------------------------------
-#define _XTAL_FREQ 5000000 //Para delay
+#define _XTAL_FREQ 8000000 //Para delay
 
 //------------------------------------------------------------------------------
 //                          Palabras de configuración
@@ -80,16 +80,18 @@ void main(void) {
 void __interrupt() isr(void){
     
     if (PIR1bits.ADIF){
-        if(ADCON0bits.CHS == 0) {
-            PORTB = ADRESH;
-            CCPR1L = (PORTB>>1) + 128;
-            CCP1CONbits.DC1B1 = PORTBbits.RB0;
+        if(ADCON0bits.CHS == 0) { //Revisar si es el primer potenciómetro
+            PORTB = ADRESH; 
+            //Configuración para primer canal de PWM
+            CCPR1L = (PORTB>>1) + 128; //Valores válidos entre 128 y 250
+            CCP1CONbits.DC1B1 = PORTBbits.RB0; //Bits menos significativos
             CCP1CONbits.DC1B0 = ADRESL>>7;}
         
-        else{
+        else{ //Revisar si es el segundo potenciómetro
             PORTB = ADRESH;
-            CCPR2L = (PORTB>>1) + 128;
-            CCP2CONbits.DC2B1 = PORTBbits.RB0;
+            //Configuración para segundo canal de PWM
+            CCPR2L = (PORTB>>1) + 128; //Valores válidos entre 128 y 250
+            CCP2CONbits.DC2B1 = PORTBbits.RB0; //Bits menos significativos
             CCP2CONbits.DC2B0 = ADRESL>>7;}
         
         PIR1bits.ADIF = 0; //Se limpia la bandera de ADC

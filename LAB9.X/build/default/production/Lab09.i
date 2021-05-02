@@ -2536,7 +2536,7 @@ void main(void) {
             else {
                 ADCON0bits.CHS = 0;}
 
-            _delay((unsigned long)((50)*(5000000/4000000.0)));
+            _delay((unsigned long)((50)*(8000000/4000000.0)));
             ADCON0bits.GO = 1;
         }
         }
@@ -2548,12 +2548,14 @@ void __attribute__((picinterrupt(("")))) isr(void){
     if (PIR1bits.ADIF){
         if(ADCON0bits.CHS == 0) {
             PORTB = ADRESH;
+
             CCPR1L = (PORTB>>1) + 128;
             CCP1CONbits.DC1B1 = PORTBbits.RB0;
             CCP1CONbits.DC1B0 = ADRESL>>7;}
 
         else{
             PORTB = ADRESH;
+
             CCPR2L = (PORTB>>1) + 128;
             CCP2CONbits.DC2B1 = PORTBbits.RB0;
             CCP2CONbits.DC2B0 = ADRESL>>7;}
@@ -2593,7 +2595,7 @@ void setup(){
 
     ADCON0bits.ADCS = 0b10;
     ADCON0bits.CHS = 0;
-    _delay((unsigned long)((50)*(5000000/4000000.0)));
+    _delay((unsigned long)((50)*(8000000/4000000.0)));
     ADCON0bits.ADON = 1;
 
 
